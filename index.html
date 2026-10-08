@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hola, ¿qué tal? Practice Test</title>
+<style>
+:root{
+  --bg:#f3f1ec; --paper:#ffffff; --ink:#1d1f24; --muted:#5f6470; --line:#d9d5cc;
+  --accent:#b4321f; --accent-2:#1f4fb4; --ok:#1d7a3e; --ok-bg:#e6f4ea; --bad:#b3261e; --bad-bg:#fbe9e7;
+  --warn:#8a5a00; --warn-bg:#fff4d6; --chip:#efece5; --shadow:0 1px 2px rgba(0,0,0,.06),0 6px 24px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15171b; --paper:#1e2127; --ink:#ecebe7; --muted:#a3a7b0; --line:#343843;
+    --accent:#ff7a63; --accent-2:#7aa2ff; --ok:#5fd18a; --ok-bg:#163222; --bad:#ff8a80; --bad-bg:#3a1d1b;
+    --warn:#f2c35b; --warn-bg:#3a2e12; --chip:#2a2e36; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15171b; --paper:#1e2127; --ink:#ecebe7; --muted:#a3a7b0; --line:#343843;
+  --accent:#ff7a63; --accent-2:#7aa2ff; --ok:#5fd18a; --ok-bg:#163222; --bad:#ff8a80; --bad-bg:#3a1d1b;
+  --warn:#f2c35b; --warn-bg:#3a2e12; --chip:#2a2e36; --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:84px}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.brand{font-weight:800;letter-spacing:-.01em;margin-right:auto}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.score{font-variant-numeric:tabular-nums;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:700}
+.score .pct{color:var(--muted);font-weight:600;margin-left:6px}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;font-weight:600}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.blue{background:var(--accent-2);border-color:var(--accent-2);color:#fff}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:28px 28px 32px;margin:20px 0}
+.head h1{font-family:Georgia,"Times New Roman",serif;font-size:20px;margin:0;line-height:1.3}
+.head h1 em{font-style:italic}
+.head .meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;color:var(--muted)}
+.head .meta span b{color:var(--ink)}
+.howto{margin-top:14px;padding:12px 14px;background:var(--chip);border-radius:10px;font-size:14px;color:var(--muted)}
+.howto b{color:var(--ink)}
+h2.parte{font-family:Georgia,serif;font-size:18px;text-decoration:underline;text-underline-offset:3px;margin:34px 0 6px}
+.q{margin:18px 0 6px}
+.q .qt{font-family:Georgia,serif}
+.q .qt b{font-family:inherit}
+.q .pts{color:var(--muted);font-size:14px}
+.items{margin:8px 0 0 0;padding:0;list-style:none}
+.items li{display:flex;gap:10px;align-items:flex-start;margin:10px 0;flex-wrap:wrap}
+.items li .num{min-width:26px;font-weight:700;padding-top:6px}
+.items li .body{flex:1;min-width:0}
+.prompt{padding-top:6px;font-family:Georgia,serif}
+input.ans{font:inherit;color:var(--ink);background:transparent;border:none;border-bottom:2px solid var(--line);padding:4px 6px;border-radius:6px 6px 0 0;outline:none;min-width:0;transition:background .15s,border-color .15s}
+input.ans:focus{border-bottom-color:var(--accent-2);background:color-mix(in srgb,var(--accent-2) 8%,transparent)}
+input.ans.ok{border-bottom-color:var(--ok);background:var(--ok-bg)}
+input.ans.acc{border-bottom-color:var(--warn);background:var(--warn-bg)}
+input.ans.bad{border-bottom-color:var(--bad);background:var(--bad-bg)}
+input.s{width:9ch} input.m{width:15ch} input.l{width:100%}
+.fb{display:block;font-size:13.5px;margin:4px 0 0;min-height:0}
+.fb:empty{display:none}
+.fb.ok{color:var(--ok)} .fb.acc{color:var(--warn)} .fb.bad{color:var(--bad)}
+.fb .tip{display:block;color:var(--muted);margin-top:2px}
+.fb .key{font-weight:700}
+.model{margin:8px 0 4px 0;padding:10px 12px;border-left:3px solid var(--line);font-size:15px}
+.model .tag{display:inline-block;background:var(--ink);color:var(--paper);font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;margin-bottom:4px;text-transform:lowercase}
+.model i{font-family:"Comic Sans MS","Chalkboard SE",cursive;font-style:normal}
+.wordbox{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:12px 0;padding:8px;background:var(--chip);border-radius:10px}
+.wordbox span{font-weight:700;padding:2px 10px;border:1px dashed var(--muted);border-radius:6px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cols h4{margin:0 0 4px;text-align:center;font-family:Georgia,serif;font-weight:400}
+.cols .cell{margin-bottom:10px}
+.dialog{font-family:Georgia,serif}
+.dialog .line{margin:4px 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px}
+.dialog .fbs{margin-left:0}
+.bracket{color:var(--muted)}
+details.review{margin-top:16px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper)}
+details.review summary{cursor:pointer;font-weight:700}
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:12px;font-size:14px}
+.rv h5{margin:0 0 4px;font-size:14px}
+.rv table{border-collapse:collapse;width:100%}
+.rv td{border-bottom:1px solid var(--line);padding:2px 4px}
+.rv ul{margin:0;padding-left:18px}
+.nums{columns:3;font-size:13px}
+.accbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--paper);border-top:1px solid var(--line);padding:8px 16px calc(8px + env(safe-area-inset-bottom))}
+.accbar .wrap{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:center}
+.accbar span.lbl{color:var(--muted);font-size:13px;margin-right:4px}
+.accbar button{min-width:40px;padding:6px 8px;font-size:18px}
+.result{display:none}
+.result.show{display:block}
+.big{font-size:44px;font-weight:800;line-height:1}
+.grade{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.letter{font-size:44px;font-weight:800;width:72px;height:72px;border-radius:16px;display:grid;place-items:center;color:#fff;background:var(--accent)}
+.missed{margin-top:16px;padding:0;list-style:none}
+.missed li{border-top:1px solid var(--line);padding:8px 0;font-size:14.5px}
+.missed .yours{color:var(--bad);text-decoration:line-through}
+.missed .right{color:var(--ok);font-weight:700}
+.secscore{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:14px}
+.secscore div{background:var(--chip);border-radius:8px;padding:8px 10px;font-size:14px}
+.secscore b{font-variant-numeric:tabular-nums}
+@media (max-width:640px){
+  .paper{padding:18px 16px 22px}
+  .cols{grid-template-columns:1fr}
+  input.m{width:12ch}
+  .brand small{display:none}
+  .accbar span.lbl{display:none}
+  .accbar button{min-width:32px;padding:5px 4px;font-size:16px}
+  .score .pct{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Español 1 · Lección 1<small>Hola, ¿qué tal? — Practice Test</small></div>
+    <div class="score" id="score">0 / 40<span class="pct">0%</span></div>
+    <button id="btnNew" title="Same format, brand-new words">🔀 New test</button>
+    <button id="btnGrade" class="primary">✅ Grade it</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="paper head">
+    <h1>Spanish I · Señor Orozco<br><em>Prueba de práctica: Hola, ¿qué tal?</em></h1>
+    <div class="meta">
+      <span>Nombre completo: <b>_____________________</b></span>
+      <span>Versión: <b id="ver">—</b></span>
+      <span>Total: <b>40 pts.</b></span>
+    </div>
+    <div class="howto">
+      <b>How it works:</b> type your answer, then press <b>Enter</b> (or tab out) to check it right away.
+      Green = correct · Yellow = right but fix the accent · Red = wrong, and it shows you the answer and why.
+      You can fix a red answer and press Enter again. Use the accent buttons at the bottom (á é í ó ú ñ ¿).
+      Press <b>New test</b> for the same kinds of questions with different words.
+    </div>
+    <details class="review">
+      <summary>📘 Quick review (peek only if you're stuck)</summary>
+      <div class="rv">
+        <div>
+          <h5>Articles</h5>
+          <table>
+            <tr><td></td><td><b>the</b></td><td><b>a / some</b></td></tr>
+            <tr><td>masc. sing.</td><td>el</td><td>un</td></tr>
+            <tr><td>fem. sing.</td><td>la</td><td>una</td></tr>
+            <tr><td>masc. pl.</td><td>los</td><td>unos</td></tr>
+            <tr><td>fem. pl.</td><td>las</td><td>unas</td></tr>
+          </table>
+          <ul style="margin-top:6px">
+            <li>Both genders → write both: <b>el/la</b> estudiante, <b>el/la</b> turista, <b>el/la</b> joven</li>
+            <li>Tricky: <b>el</b> mapa, <b>el</b> día, <b>el</b> problema, <b>el</b> programa, <b>la</b> mano, <b>la</b> foto</li>
+            <li>-dad / -ción words are feminine: la universidad, la lección</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Ser (to be)</h5>
+          <table>
+            <tr><td>yo</td><td><b>soy</b></td><td>nosotros/as</td><td><b>somos</b></td></tr>
+            <tr><td>tú</td><td><b>eres</b></td><td>vosotros/as</td><td><b>sois</b></td></tr>
+            <tr><td>él/ella/Ud.</td><td><b>es</b></td><td>ellos/ellas/Uds.</td><td><b>son</b></td></tr>
+          </table>
+          <ul style="margin-top:6px">
+            <li>Origin: Soy <b>de</b> California.</li>
+            <li>Possession: Es <b>del</b> profesor (de + el = <b>del</b>), Es <b>de la</b> profesora.</li>
+            <li>¿Quién? (1 person) · ¿Quiénes? (2+) · ¿De dónde? · ¿De quién?</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Telling time</h5>
+          <ul>
+            <li><b>Es la una</b> (1:00) — every other hour: <b>Son las</b> dos…</li>
+            <li>:15 y cuarto · :30 y media · :45 menos cuarto</li>
+            <li>After :30 → next hour <b>menos</b>: 12:40 = la una menos veinte</li>
+            <li>¿A qué hora…? → <b>a la</b> una / <b>a las</b> tres</li>
+            <li>a.m. de la mañana · p.m. de la tarde · night de la noche</li>
+            <li>12:00 p.m. = Es mediodía · 12:00 a.m. = Es medianoche</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Números 0–30</h5>
+          <div class="nums" id="numlist"></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="paper" id="test"></section>
+
+  <section class="paper result" id="result"></section>
+</main>
+
+<div class="accbar">
+  <div class="wrap" id="accbar">
+    <span class="lbl">Accents:</span>
+  </div>
+</div>
+
+<script>
+(() => {
+// ---------- helpers ----------
+const NUM = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez','once','doce','trece','catorce','quince','dieciséis','diecisiete','dieciocho','diecinueve','veinte','veintiuno','veintidós','veintitrés','veinticuatro','veinticinco','veintiséis','veintisiete','veintiocho','veintinueve','treinta'];
+const numWord = n => { if (n <= 30) return NUM[n]; const t = Math.floor(n/10)*10, u = n%10; const tw = {30:'treinta',40:'cuarenta',50:'cincuenta'}[t]; return u ? tw+' y '+NUM[u] : tw; };
+const norm = s => (s||'').normalize('NFC').toLowerCase().replace(/[¿?¡!.,;:"“”«»]/g,' ').replace(/[’']/g,'').replace(/\s+/g,' ').trim();
+const deacc = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').normalize('NFC');
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let R = Math.random;
+const mulberry = a => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const rnd = n => Math.floor(R()*n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a = [...a]; for (let i = a.length-1; i > 0; i--) { const j = rnd(i+1); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const sample = (a,k) => shuffle(a).slice(0,k);
+const ARTS = ['el','la','los','las','un','una','unos','unas'];
+
+document.getElementById('numlist').innerHTML = NUM.map((w,i)=>`${i} ${w}`).join('<br>');
+
+// ---------- question registry ----------
+let Q = {};       // id -> {check, disp, tip, label, sec}
+let ORDER = [];   // ids in order
+let STATE = {};   // id -> 'ok'|'acc'|'bad'
+const reg = (id, obj) => { Q[id] = obj; ORDER.push(id); return id; };
+
+function textQ(accepted, disp, tip){
+  const A = accepted.map(norm), D = A.map(deacc);
+  return { disp, tip, check(v){
+    const n = norm(v); if (!n) return {s:'bad'};
+    if (A.includes(n)) return {s:'ok'};
+    if (D.includes(deacc(n))) return {s:'acc'};
+    return {s:'bad'};
+  }};
+}
+const artTokens = v => norm(v).replace(/[\/\-+&()]/g,' ').split(' ').filter(t => t && t !== 'o' && t !== 'y');
+const artKey = arr => [...new Set(arr)].sort().join(',');
+function artQ(expected, disp, tip){
+  return { disp, tip, check(v){
+    const t = artTokens(v); if (!t.length) return {s:'bad'};
+    return {s: artKey(t.filter(x => ARTS.includes(x))) === artKey(expected) ? 'ok' : 'bad'};
+  }};
+}
+
+// ---------- time ----------
+const h12of = h24 => ((h24 + 11) % 12) + 1;
+function periods(h24){
+  if (h24 < 6) return ['de la mañana','de la madrugada','de la noche'];
+  if (h24 < 12) return ['de la mañana'];
+  if (h24 === 12) return ['de la tarde','del mediodía'];
+  if (h24 <= 18) return ['de la tarde'];
+  if (h24 === 19) return ['de la tarde','de la noche'];
+  return ['de la noche'];
+}
+function timeVariants(h24, m, {at=false, period='required'} = {}){
+  const h = h12of(h24), nx = (h % 12) + 1;
+  const minW = mm => mm === 15 ? ['cuarto','quince'] : mm === 30 ? ['media','treinta'] : [numWord(mm)];
+  const cores = [];
+  if (m === 0) cores.push([h,''],[h,' en punto']);
+  else if (m > 30){ minW(60-m).forEach(w => cores.push([nx,' menos '+w])); minW(m).forEach(w => cores.push([h,' y '+w])); }
+  else minW(m).forEach(w => cores.push([h,' y '+w]));
+  const hp = hh => at ? (hh === 1 ? 'a la una' : 'a las '+NUM[hh]) : (hh === 1 ? 'es la una' : 'son las '+NUM[hh]);
+  const pers = period === 'required' ? periods(h24) : ['', 'de la mañana','de la tarde','de la noche','de la madrugada','del mediodía'];
+  const out = [];
+  cores.forEach(([hh,r]) => pers.forEach(p => out.push(hp(hh)+r+(p ? ' '+p : ''))));
+  if (h24 === 12 && m === 0) (at ? ['a mediodía','al mediodía'] : ['es mediodía','es el mediodía']).forEach(x => out.unshift(x));
+  if (h24 === 0 && m === 0) (at ? ['a medianoche'] : ['es medianoche']).forEach(x => out.unshift(x));
+  return out;
+}
+function timeTip(h24, m, withPeriod){
+  const h = h12of(h24), nx = (h % 12) + 1, t = [];
+  if (h24 === 12 && m === 0) t.push('12:00 p.m. → "Es mediodía" (or "Son las doce de la tarde").');
+  if (h === 1 && m <= 30 || (m > 30 && nx === 1)) t.push('1 o\'clock is singular: "Es la una…" / "a la una" — never "son las uno".');
+  if (m > 30) t.push(`After :30, go to the NEXT hour and subtract with menos: ${h}:${String(m).padStart(2,'0')} → ${nx === 1 ? 'la una' : 'las '+NUM[nx]} menos ${m === 45 ? 'cuarto' : numWord(60-m)}.`);
+  if (m === 15) t.push(':15 → y cuarto (y quince is OK too).');
+  if (m === 30) t.push(':30 → y media.');
+  if (withPeriod) t.push('a.m. → de la mañana · afternoon p.m. → de la tarde · night → de la noche.');
+  return t.join(' ');
+}
+const fmt = (h24, m, ampm=true) => `${h12of(h24)}:${String(m).padStart(2,'0')}${ampm ? (h24 < 12 ? ' a.m.' : ' p.m.') : ''}`;
+
+// ---------- word pools ----------
+const ART_BOTH = [
+  {w:'joven', g:'b'}, {w:'jóvenes', g:'b', pl:1}, {w:'estudiante', g:'b'}, {w:'estudiantes', g:'b', pl:1},
+  {w:'turista', g:'b'}, {w:'turistas', g:'b', pl:1}
+];
+const ART_TRICKY = [
+  {w:'mapa', g:'m', tip:'Mapa ends in -a but is masculine.'}, {w:'mapas', g:'m', pl:1, tip:'Mapa ends in -a but is masculine.'},
+  {w:'problema', g:'m', tip:'Problema ends in -a but is masculine.'}, {w:'problemas', g:'m', pl:1, tip:'Problema ends in -a but is masculine.'},
+  {w:'día', g:'m', tip:'Día ends in -a but is masculine.'}, {w:'días', g:'m', pl:1, tip:'Día ends in -a but is masculine.'},
+  {w:'programa', g:'m', tip:'Programa ends in -a but is masculine.'},
+  {w:'mano', g:'f', tip:'Mano ends in -o but is feminine.'}, {w:'manos', g:'f', pl:1, tip:'Mano ends in -o but is feminine.'},
+  {w:'foto', g:'f', tip:'Foto is short for fotografía, so it is feminine.'}, {w:'fotos', g:'f', pl:1, tip:'Foto is short for fotografía, so it is feminine.'}
+];
+const ART_REG = [
+  {w:'palabras', g:'f', pl:1}, {w:'lápices', g:'m', pl:1}, {w:'lecciones', g:'f', pl:1, tip:'-ción words are feminine.'},
+  {w:'países', g:'m', pl:1}, {w:'computadoras', g:'f', pl:1}, {w:'cuadernos', g:'m', pl:1},
+  {w:'nacionalidad', g:'f', tip:'-dad words are feminine.'}, {w:'autobús', g:'m'}, {w:'conductoras', g:'f', pl:1},
+  {w:'hombres', g:'m', pl:1}, {w:'mujer', g:'f'}, {w:'capital', g:'f'},
+  {w:'universidades', g:'f', pl:1, tip:'-dad words are feminine.'}, {w:'diccionario', g:'m'}, {w:'pasajeras', g:'f', pl:1},
+  {w:'cosas', g:'f', pl:1}, {w:'escuela', g:'f'}
+];
+const defArts = n => n.pl ? ({m:['los'],f:['las'],b:['los','las']})[n.g] : ({m:['el'],f:['la'],b:['el','la']})[n.g];
+const indArts = n => n.pl ? ({m:['unos'],f:['unas'],b:['unos','unas']})[n.g] : ({m:['un'],f:['una'],b:['un','una']})[n.g];
+const bothTip = 'This word can be a guy or a girl → write both (with a slash).';
+
+const CLS = {
+  People: [['turista|el,la','turistas|los,las'],['pasajero|el','pasajeros|los','pasajera|la'],['estudiante|el,la','estudiantes|los,las'],['conductor|el','conductora|la','conductores|los'],['hombre|el','hombres|los'],['mujer|la','mujeres|las'],['joven|el,la','jóvenes|los,las'],['chico|el','chicas|las'],['profesora|la','profesores|los'],['niño|el','niñas|las']],
+  Places: [['escuela|la','escuelas|las'],['biblioteca|la','bibliotecas|las'],['país|el','países|los'],['capital|la','capitales|las'],['universidad|la','universidades|las']],
+  Objects: [['cuaderno|el','cuadernos|los'],['maleta|la','maletas|las'],['lápiz|el','lápices|los'],['mapa|el','mapas|los'],['computadora|la','computadoras|las'],['diccionario|el','diccionarios|los'],['autobús|el','autobuses|los'],['foto|la','fotos|las']]
+};
+
+const COUNT_NOUNS = [['cuadernos','m'],['chicas','f'],['lápices','m'],['maletas','f'],['computadoras','f'],['diccionarios','m'],['mapas','m'],['fotos','f'],['pasajeros','m'],['palabras','f'],['chicos','m'],['mujeres','f'],['autobuses','m']];
+const PLACES = ['en la clase','en la biblioteca','en la escuela','en el autobús','en la universidad','en la capital'];
+const PLACES2 = ['en el garaje (garage)','en la biblioteca','en la escuela','en la clase','en la oficina (office)'];
+
+const SER1 = [
+  {l:['—¿__ es ella?','—¿Ella? Se llama Marisa.'], a:[['quién']], tip:'Asking who (one person) → ¿Quién? — with an accent.'},
+  {l:['—¿__ son ellos?','—Son Javier y Óscar.'], a:[['quiénes']], tip:'Asking who about 2+ people → ¿Quiénes?'},
+  {l:['—¿__ es el conductor?','—Es el señor Vargas.'], a:[['quién']], tip:'Asking who (one person) → ¿Quién?'},
+  {l:['—¿__ es eso?','—Es un diccionario.'], a:[['qué']], tip:'Asking about a thing → ¿Qué? (with an accent).'},
+  {l:['—¿__ son las chicas?','—Son Ana y Lupe.'], a:[['quiénes']], tip:'Asking who about 2+ people → ¿Quiénes?'},
+  {l:['—¿__ es el profesor?','—¿Él? Se llama Ricardo.'], a:[['quién']], tip:'Asking who (one person) → ¿Quién?'}
+];
+const SER2 = [
+  {l:['—¿__ de Puerto Rico?','—Sí. Yo __ de San Juan.'], a:[['eres tú','eres','tú eres'],['soy']], tip:['Answer is "yo", so the question is to tú → ¿Eres tú…?','yo → soy']},
+  {l:['—¿__ de la capital?','—Sí. Nosotros __ de Lima.'], a:[['son ustedes','son'],['somos']], tip:['Answer is "nosotros", so the question is to ustedes → ¿Son ustedes…?','nosotros → somos']},
+  {l:['—¿__ de España, señora Gómez?','—Sí, yo __ de Madrid.'], a:[['es usted','es'],['soy']], tip:['Señora Gómez = usted (formal) → ¿Es usted…?','yo → soy']},
+  {l:['—¿De __ son ellos?','—__ de Ecuador.'], a:[['dónde'],['son','ellos son']], tip:['Where from → ¿De dónde…? (accent!)','ellos → son']},
+  {l:['—¿De __ es Carlos?','—__ de Argentina.'], a:[['dónde'],['es','él es','carlos es']], tip:['Where from → ¿De dónde…? (accent!)','Carlos (él) → es']},
+  {l:['—¿De quién __ el lápiz?','—__ de Daniela.'], a:[['es'],['es','el lápiz es']], tip:['One thing (el lápiz) → es','One thing → es']},
+  {l:['—¿De quién __ los mapas?','—__ del profesor.'], a:[['son'],['son','los mapas son']], tip:['Many things (los mapas) → son','Many things → son']},
+  {l:['—¿__ ellas de Chile?','—Sí, ellas __ de Santiago.'], a:[['son'],['son']], tip:['ellas → son','ellas → son']},
+  {l:['—¿Ustedes __ estudiantes?','—Sí, nosotras __ estudiantes de español.'], a:[['son'],['somos']], tip:['ustedes → son','nosotras → somos']},
+  {l:['—¿Tú __ turista?','—No, yo __ conductor.'], a:[['eres'],['soy']], tip:['tú → eres','yo → soy']}
+];
+
+const ORAC = {
+  A: [
+    {p:'Marisol / ser / profesora de inglés', a:['Marisol es profesora de inglés']},
+    {p:'tú / ser / turista', a:['Tú eres turista','Eres turista']},
+    {p:'ellas / ser / pasajeras', a:['Ellas son pasajeras']},
+    {p:'yo / ser / estudiante', a:['Yo soy estudiante','Soy estudiante']},
+    {p:'nosotros / ser / conductores', a:['Nosotros somos conductores','Somos conductores']},
+    {p:'usted / ser / profesor de historia', a:['Usted es profesor de historia']},
+    {p:'Diego y Ana / ser / estudiantes de español', a:['Diego y Ana son estudiantes de español']},
+    {p:'yo / ser / conductora', a:['Yo soy conductora','Soy conductora']},
+    {p:'Tomás / ser / estudiante de ciencias', a:['Tomás es estudiante de ciencias']}
+  ],
+  B: [
+    {p:'ellos / ser / Ecuador', a:['Ellos son de Ecuador']},
+    {p:'tú / ser / Canadá', a:['Tú eres de Canadá','Eres de Canadá']},
+    {p:'usted / ser / Puerto Rico', a:['Usted es de Puerto Rico']},
+    {p:'yo / ser / España', a:['Yo soy de España','Soy de España']},
+    {p:'nosotras / ser / México', a:['Nosotras somos de México','Somos de México']},
+    {p:'la profesora / ser / Colombia', a:['La profesora es de Colombia']},
+    {p:'ustedes / ser / Texas', a:['Ustedes son de Texas']}
+  ],
+  C: [
+    {p:'lápices / ser / estudiante', a:['Los lápices son del estudiante','Los lápices son de la estudiante']},
+    {p:'mapa / ser / profesora', a:['El mapa es de la profesora']},
+    {p:'maletas / ser / turista', a:['Las maletas son del turista','Las maletas son de la turista']},
+    {p:'diccionario / ser / Carmen', a:['El diccionario es de Carmen']},
+    {p:'fotos / ser / chico', a:['Las fotos son del chico']},
+    {p:'cuaderno / ser / conductor', a:['El cuaderno es del conductor']},
+    {p:'computadoras / ser / escuela', a:['Las computadoras son de la escuela']}
+  ],
+  D: [
+    {p:'¿de / quién / ser / maleta?', a:['¿De quién es la maleta?']},
+    {p:'¿de / dónde / ser / ustedes?', a:['¿De dónde son ustedes?']},
+    {p:'¿de / quién / ser / lápices?', a:['¿De quién son los lápices?']},
+    {p:'¿de / dónde / ser / tú?', a:['¿De dónde eres tú?','¿De dónde eres?']},
+    {p:'¿de / quiénes / ser / diccionarios?', a:['¿De quiénes son los diccionarios?']},
+    {p:'¿quién / ser / profesor?', a:['¿Quién es el profesor?']}
+  ]
+};
+const ORAC_TIP = {
+  A:'Conjugate ser to match the subject (yo soy, tú eres, él/ella/usted es, nosotros somos, ellos/ustedes son). No "un/una" before a job.',
+  B:'Origin needs "de": … es de …',
+  C:'Put el/la/los/las on the thing, use es (one thing) or son (many), and de + el = del.',
+  D:'Add the article to the noun, and ser matches the noun: es for one thing, son for many.'
+};
+
+const EVENTS = ['la clase de español','la clase de historia','el almuerzo','la cena','el desayuno','la fiesta','el programa de televisión','la clase de biología','el concierto','la clase de arte','la clase de inglés'];
+
+// ---------- build ----------
+let SEED = 0;
+function inp(id, size){ return `<input class="ans ${size}" id="${id}" data-id="${id}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><span class="fb" id="fb-${id}"></span>`; }
+
+function build(seed){
+  SEED = seed; R = mulberry(seed);
+  Q = {}; ORDER = []; STATE = {};
+  document.getElementById('ver').textContent = '#' + seed;
+  let h = '';
+
+  // ===== PARTE A =====
+  h += `<h2 class="parte">PARTE A – Nouns and Articles</h2>`;
+  const both = sample(ART_BOTH.filter((x,i,a)=>true), 6);
+  const b1 = both[0], b2 = both.find(x => deacc(x.w).slice(0,4) !== deacc(b1.w).slice(0,4));
+  const reg1 = pick(ART_REG), trk = pick(ART_TRICKY);
+  const reg2 = pick(ART_REG.filter(x => x !== reg1)), trk2 = pick(ART_TRICKY.filter(x => x.w.slice(0,3) !== trk.w.slice(0,3)));
+  const set1 = shuffle([b1, R() < .5 ? reg1 : trk2]);
+  const set2 = shuffle([b2, trk]);
+
+  h += `<div class="q"><span class="qt"><b>1 Artículos</b> Write the definite article (<b>el, la, los, las</b>) for each word. If both masculine and feminine articles are possible, write both.</span> <span class="pts">(2 x 1 pt. each = 2 pts.)</span><ul class="items">`;
+  set1.forEach((n,i) => {
+    const id = reg(`a1-${i}`, {...artQ(defArts(n), defArts(n).join('/'), n.g==='b' ? bothTip : (n.tip||'')), label:`1.${i+1} ___ ${n.w}`, sec:'A'});
+    h += `<li><span class="num">${i+1}.</span><div class="body">${inp(id,'s')} <span class="prompt">${n.w}</span></div></li>`;
+  });
+  h += `</ul></div>`;
+
+  h += `<div class="q"><span class="qt"><b>2 Más artículos</b> Write the indefinite article (<b>un, una, unos, unas</b>) for each word. If both masculine and feminine articles are possible, write both.</span> <span class="pts">(2 x 1 pt. each = 2 pts.)</span><ul class="items">`;
+  set2.forEach((n,i) => {
+    const id = reg(`a2-${i}`, {...artQ(indArts(n), indArts(n).join('/'), n.g==='b' ? bothTip : (n.tip||'')), label:`2.${i+1} ___ ${n.w}`, sec:'A'});
+    h += `<li><span class="num">${i+1}.</span><div class="body">${inp(id,'s')} <span class="prompt">${n.w}</span></div></li>`;
+  });
+  h += `</ul></div>`;
+
+  // classify
+  const cats = {};
+  Object.entries(CLS).forEach(([cat, groups]) => {
+    cats[cat] = sample(groups, 2).map(g => { const [w, a] = pick(g).split('|'); return {w, a:a.split(',')}; });
+  });
+  CLASSIFY = cats;
+  const allWords = shuffle(Object.values(cats).flat().map(x => x.w));
+  h += `<div class="q"><span class="qt"><b>3 Clasificar</b> Sort the words from the box into the appropriate categories. Include the definite article (<b>el, la, los, las</b>) for each word. If both masculine and feminine articles are possible, write both.</span> <span class="pts">(6 x 1 pt. each = 6 pts.)</span>`;
+  h += `<div class="wordbox">${allWords.map(w => `<span>${w}</span>`).join('')}</div><div class="cols">`;
+  Object.keys(cats).forEach(cat => {
+    h += `<div><h4>${cat}</h4>`;
+    [0,1].forEach(i => {
+      const id = `c-${cat}-${i}`;
+      reg(id, {classify:cat, label:`3 · ${cat}`, sec:'A', disp: cats[cat].map(x => x.a.join('/')+' '+x.w).join(', '),
+        tip: cats[cat].some(x => x.a.length > 1) ? 'Words like turista/estudiante/joven need both articles: el/la.' : ''});
+      h += `<div class="cell">${inp(id,'l')}</div>`;
+    });
+    h += `</div>`;
+  });
+  h += `</div></div>`;
+
+  // ===== PARTE B =====
+  h += `<h2 class="parte">PARTE B – Números 0-30</h2>`;
+  const tricky = sample([16,17,18,19,21,22,23,26,27,28], 3), easy = sample([0,1,4,5,7,9,11,13,14,15,20,24,25,29,30].filter(x=>!tricky.includes(x)), 3);
+  const nums = shuffle([...tricky, ...easy]);
+  h += `<div class="q"><span class="qt"><b>4 Números</b> Write the numbers as words.</span> <span class="pts">(6 x 1 pt. each = 6 pts.)</span><ul class="items">`;
+  nums.forEach((n,i) => {
+    const L = 'abcdef'[i];
+    const id = reg(`n-${i}`, {...textQ([NUM[n]], NUM[n], n >= 16 && n <= 29 ? '16–19 and 21–29 are ONE word (dieci-…, veinti-…). Accents on dieciséis, veintidós, veintitrés, veintiséis.' : ''), label:`4${L} · ${n}`, sec:'B'});
+    h += `<li><span class="num">${L}.</span><div class="body"><span class="prompt">${n}</span> ${inp(id,'m')}</div></li>`;
+  });
+  h += `</ul></div>`;
+
+  // completar
+  const cn = sample(COUNT_NOUNS, 2), n1 = cn[0], n2 = cn[1];
+  const cnt1 = 2 + rnd(28); let b = pick([2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,22,23,26]); let c = pick([2,3,4,5,6,7,8,9,10,11,12,14,16,20,22,23,25,26,28,30].filter(x=>x!==b));
+  const cu = n1[1] === 'm' ? 'cuántos' : 'cuántas';
+  h += `<div class="q"><span class="qt"><b>5 Completar</b> Fill in the blanks.</span> <span class="pts">(4 x 1 pt. each = 4 pts.)</span><ul class="items">`;
+  const p1 = reg('cp-0', {...textQ([cu], cap(cu), `Use ${cu} to match "${n1[0]}" (${n1[1]==='m'?'masculine':'feminine'}) — and don't forget the accent on á.`), label:`5.1 ¿___ ${n1[0]} hay…?`, sec:'B'});
+  const p2 = reg('cp-1', {...textQ(['hay'], 'Hay', '"Hay" = there is / there are.'), label:`5.1 —___ ${cnt1} ${n1[0]}.`, sec:'B'});
+  const p3 = reg('cp-2', {...textQ([NUM[b]], NUM[b], 'Write the number in brackets as a word.'), label:`5.2 ¿Hay ___ [${b}] ${n2[0]}?`, sec:'B'});
+  const p4 = reg('cp-3', {...textQ([NUM[c]], NUM[c], 'Write the number in brackets as a word.'), label:`5.2 …hay ___ [${c}] ${n2[0]}.`, sec:'B'});
+  h += `<li><span class="num">1.</span><div class="body dialog">
+          <div class="line">—¿ ${inp(p1,'m')} ${n1[0]} hay ${pick(PLACES)}?</div>
+          <div class="line">— ${inp(p2,'m')} ${cnt1} ${n1[0]}.</div></div></li>`;
+  h += `<li><span class="num">2.</span><div class="body dialog">
+          <div class="line">—¿Hay ${inp(p3,'m')} <span class="bracket">[${b}]</span> ${n2[0]} aquí (here)?</div>
+          <div class="line">—Aquí no hay, pero (but) ${pick(PLACES2)} hay ${inp(p4,'m')} <span class="bracket">[${c}]</span> ${n2[0]}.</div></div></li>`;
+  h += `</ul></div>`;
+
+  // ===== PARTE C =====
+  h += `<h2 class="parte">PARTE C – Present Tense of <i>ser</i></h2>`;
+  h += `<div class="q"><span class="qt"><b>6 Completar</b> Fill in the blanks.</span> <span class="pts">(5 x 1 pt. each = 5 pts.)</span><ul class="items">`;
+  const dlg = [pick(SER1), ...sample(SER2, 2)];
+  dlg.forEach((d, di) => {
+    let k = 0;
+    const lines = d.l.map(line => {
+      const parts = line.split('__');
+      return parts.map((txt, pi) => {
+        if (pi === parts.length - 1) return esc(txt);
+        const ans = d.a[k], tip = Array.isArray(d.tip) ? d.tip[k] : d.tip;
+        const disp = cap(ans[0]);
+        const id = reg(`s-${di}-${k}`, {...textQ(ans, disp, tip), label:`6.${di+1} ${d.l.join(' ')}`, sec:'C'});
+        k++;
+        return esc(txt) + ' ' + inp(id, 'm') + ' ';
+      }).join('');
+    });
+    h += `<li><span class="num">${di+1}.</span><div class="body dialog">${lines.map(l => `<div class="line">${l}</div>`).join('')}</div></li>`;
+  });
+  h += `</ul></div>`;
+
+  h += `<div class="q"><span class="qt"><b>7 Oraciones</b> Write complete sentences using the information provided. Make any necessary changes.</span> <span class="pts">(5 x 1 pt. each = 5 pts.)</span>`;
+  h += `<div class="model"><span class="tag">modelo</span><br>nosotros / ser / turista<br><i>Nosotros somos turistas.</i></div><ul class="items">`;
+  const [a1, a2] = sample(ORAC.A, 2);
+  const oset = [['A',a1],['B',pick(ORAC.B)],['C',pick(ORAC.C)],['D',pick(ORAC.D)],['A',a2]];
+  oset.forEach(([t, o], i) => {
+    const disp = o.a[0].includes('¿') ? o.a[0] : o.a[0] + '.';
+    const id = reg(`o-${i}`, {...textQ(o.a, disp, ORAC_TIP[t]), label:`7.${i+1} ${o.p}`, sec:'C'});
+    h += `<li><span class="num">${i+1}.</span><div class="body"><div class="prompt">${esc(o.p)}</div>${inp(id,'l')}</div></li>`;
+  });
+  h += `</ul></div>`;
+
+  // ===== PARTE D =====
+  h += `<h2 class="parte">PARTE D – Telling Time</h2>`;
+  const t8 = shuffle([
+    [6 + rnd(5), 15],
+    [13 + rnd(9), pick([40,45,50])],
+    [pick([1,13]), pick([5,10,20,25])],
+    R() < .5 ? [12, 0] : [pick([7,8,9,10,19,20,21]), 30],
+    [pick([8,9,10,11,15,16,17,22]), pick([0,20,35,55])]
+  ]);
+  h += `<div class="q"><span class="qt"><b>8 ¿Qué hora es?</b> Write the times using complete sentences. Follow the model.</span> <span class="pts">(5 x 1 pt. each = 5 pts.)</span>`;
+  h += `<div class="model"><span class="tag">modelo</span><br>3:00 p.m.<br><i>Son las tres de la tarde.</i></div><ul class="items">`;
+  t8.forEach(([hh, mm], i) => {
+    const L = 'abcde'[i], v = timeVariants(hh, mm, {period:'required'});
+    const id = reg(`t-${i}`, {...textQ(v, cap(v[0]) + '.', timeTip(hh, mm, true)), label:`8${L} · ${fmt(hh,mm)}`, sec:'D'});
+    h += `<li><span class="num">${L}.</span><div class="body"><span class="prompt">${fmt(hh, mm)}</span> ${inp(id,'l')}</div></li>`;
+  });
+  h += `</ul></div>`;
+
+  h += `<div class="q"><span class="qt"><b>9 Preguntas</b> Answer the questions using the times given in parentheses. Use complete sentences and write the numbers as words.</span> <span class="pts">(5 x 1 pt. each = 5 pts.)</span><ul class="items">`;
+  const times9 = shuffle([[1, pick([10,15,20,30,45])], [12, pick([15,20,45,0])], [2 + rnd(9), pick([0,15,20,25,30,40,45])], [2 + rnd(9), pick([5,10,30,35,50])], [2 + rnd(9), pick([15,25,30,45])]]);
+  const ev = sample(EVENTS, 3);
+  const kinds = ['at','now','at','at','now'];
+  let e = 0;
+  kinds.forEach((k, i) => {
+    const [hh, mm] = times9[i];
+    let qtext, acc, disp, tip;
+    if (k === 'now'){
+      acc = timeVariants(hh, mm, {period:'any'});
+      qtext = `¿Qué hora es? (${fmt(hh, mm, false)})`;
+      disp = cap(acc[0]) + '.';
+      tip = 'Answer with "Es la una…" or "Son las…". ' + timeTip(hh, mm, false);
+    } else {
+      const evt = ev[e++], at = timeVariants(hh, mm, {at:true, period:'any'});
+      acc = [...at.map(a => `${evt} es ${a}`), ...at.map(a => `es ${a}`)];
+      qtext = `¿A qué hora es ${evt}? (${fmt(hh, mm, false)})`;
+      disp = `${cap(evt)} es ${at[0]}.`;
+      tip = `"¿A qué hora…?" → answer with "…es a las…" (or "a la una"). ` + timeTip(hh, mm, false);
+    }
+    const id = reg(`p-${i}`, {...textQ(acc, disp, tip), label:`9.${i+1} ${qtext}`, sec:'D'});
+    h += `<li><span class="num">${i+1}.</span><div class="body"><div class="prompt">${esc(qtext)}</div>${inp(id,'l')}</div></li>`;
+  });
+  h += `</ul></div>`;
+  h += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px"><button class="primary" id="btnGrade2">✅ Grade my test</button><button id="btnNew2">🔀 New test (different words)</button><button id="btnClear">↺ Clear answers</button></div>`;
+
+  document.getElementById('test').innerHTML = h;
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('btnGrade2').onclick = gradeAll;
+  document.getElementById('btnNew2').onclick = newTest;
+  document.getElementById('btnClear').onclick = clearAll;
+  restore();
+  updateScore();
+}
+let CLASSIFY = {};
+
+// ---------- checking ----------
+function checkClassify(id, val){
+  const cat = Q[id].classify, words = CLASSIFY[cat];
+  const t = artTokens(val); if (!t.length) return {s:'bad'};
+  const arts = t.filter(x => ARTS.includes(x)), noun = t.filter(x => !ARTS.includes(x)).join(' ');
+  const findIn = list => list.find(x => norm(x.w) === noun) || list.find(x => deacc(norm(x.w)) === deacc(noun));
+  const hit = findIn(words);
+  if (!hit){
+    const other = Object.keys(CLASSIFY).find(k => k !== cat && findIn(CLASSIFY[k]));
+    return {s:'bad', msg: other ? `"${noun}" goes under ${other}.` : null};
+  }
+  const otherId = `c-${cat}-${id.endsWith('0') ? 1 : 0}`;
+  const ov = document.getElementById(otherId).value;
+  if (ov && id.endsWith('1')){
+    const ot = artTokens(ov).filter(x => !ARTS.includes(x)).join(' ');
+    if (deacc(ot) === deacc(norm(hit.w))) return {s:'bad', msg:'You already used that word — write the other one.'};
+  }
+  if (artKey(arts) !== artKey(hit.a)) return {s:'bad', msg:`Article: <span class="key">${hit.a.join('/')} ${hit.w}</span>`};
+  return {s: norm(hit.w) === noun ? 'ok' : 'acc', fix: hit.a.join('/') + ' ' + hit.w};
+}
+
+function check(id){
+  const el = document.getElementById(id), fb = document.getElementById('fb-' + id), q = Q[id];
+  const v = el.value;
+  const r = q.classify ? checkClassify(id, v) : q.check(v);
+  STATE[id] = r.s;
+  el.classList.remove('ok','acc','bad'); el.classList.add(r.s);
+  fb.className = 'fb ' + r.s;
+  if (r.s === 'ok') fb.innerHTML = pick(['✓ ¡Correcto!','✓ ¡Muy bien!','✓ ¡Excelente!','✓ ¡Perfecto!','✓ ¡Eso es!']);
+  else if (r.s === 'acc') fb.innerHTML = `✓ Almost — check the accent: <span class="key">${esc(r.fix || q.disp)}</span>`;
+  else {
+    const msg = r.msg || `Answer: <span class="key">${esc(q.disp)}</span>`;
+    fb.innerHTML = `✗ ${v.trim() ? '' : '(blank) '}${msg}${q.tip ? `<span class="tip">💡 ${esc(q.tip)}</span>` : ''}`;
+  }
+  save(); updateScore();
+  return r.s;
+}
+function clearMark(id){
+  delete STATE[id];
+  const el = document.getElementById(id); el.classList.remove('ok','acc','bad');
+  const fb = document.getElementById('fb-' + id); fb.className = 'fb'; fb.innerHTML = '';
+}
+
+function updateScore(){
+  const pts = ORDER.filter(id => STATE[id] === 'ok' || STATE[id] === 'acc').length;
+  const done = Object.keys(STATE).length;
+  document.getElementById('score').innerHTML = `${pts} / ${ORDER.length}<span class="pct">${done ? Math.round(pts/done*100) + '% of ' + done + ' checked' : 'not started'}</span>`;
+}
+
+function gradeAll(){
+  ORDER.forEach(check);
+  const pts = ORDER.filter(id => STATE[id] !== 'bad').length, tot = ORDER.length, pct = Math.round(pts/tot*100);
+  const letter = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'F';
+  const color = {A:'#1d7a3e',B:'#2f6fb4',C:'#b07d00',D:'#c25a12',F:'#b3261e'}[letter];
+  const secs = {A:'Parte A · Nouns & Articles',B:'Parte B · Números',C:'Parte C · Ser',D:'Parte D · Time'};
+  const secHtml = Object.entries(secs).map(([k, name]) => {
+    const ids = ORDER.filter(id => Q[id].sec === k), got = ids.filter(id => STATE[id] !== 'bad').length;
+    return `<div>${name}<br><b>${got} / ${ids.length}</b></div>`;
+  }).join('');
+  const missed = ORDER.filter(id => STATE[id] === 'bad');
+  const accs = ORDER.filter(id => STATE[id] === 'acc').length;
+  const msg = pct >= 90 ? '¡Fantástico! You are ready.' : pct >= 80 ? '¡Muy bien! Review the red ones and try a new version.' : pct >= 70 ? 'Not bad — study the tips below, then hit "New test".' : 'Keep practicing — read the Quick review, then try again.';
+  const res = document.getElementById('result');
+  res.innerHTML = `<div class="grade"><div class="letter" style="background:${color}">${letter}</div>
+      <div><div class="big">${pts} / ${tot}</div><div>${pct}% — ${msg}</div>${accs ? `<div style="color:var(--warn);font-size:14px">${accs} answer(s) had accent mistakes (counted right here — your teacher may take points off).</div>` : ''}</div></div>
+    <div class="secscore">${secHtml}</div>
+    ${missed.length ? `<h3 style="margin:22px 0 0">Review these (${missed.length})</h3><ul class="missed">${missed.map(id => {
+        const v = document.getElementById(id).value.trim();
+        return `<li><b>${esc(Q[id].label)}</b><br>${v ? `<span class="yours">${esc(v)}</span> → ` : '<i>(blank)</i> → '}<span class="right">${esc(Q[id].disp)}</span>${Q[id].tip ? `<div style="color:var(--muted);font-size:13px">💡 ${esc(Q[id].tip)}</div>` : ''}</li>`;
+      }).join('')}</ul>` : '<p>No mistakes. ¡Perfecto! 🎉</p>'}
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      ${missed.length ? '<button class="blue" id="btnRetry">✏️ Retry the ones I missed</button>' : ''}
+      <button class="primary" id="btnNew3">🔀 New test (different words)</button>
+    </div>`;
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth'});
+  const rt = document.getElementById('btnRetry');
+  if (rt) rt.onclick = () => { missed.forEach(id => { document.getElementById(id).value = ''; clearMark(id); }); save(); updateScore(); res.classList.remove('show'); document.getElementById(missed[0]).scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(() => document.getElementById(missed[0]).focus(), 400); };
+  document.getElementById('btnNew3').onclick = newTest;
+}
+
+// ---------- persistence (per version) ----------
+const KEY = () => 'sp1-hola-' + SEED;
+function save(){ try { const o = {}; ORDER.forEach(id => { const v = document.getElementById(id).value; if (v) o[id] = v; }); localStorage.setItem(KEY(), JSON.stringify(o)); } catch(e){} }
+function restore(){ try { const o = JSON.parse(localStorage.getItem(KEY()) || '{}'); Object.entries(o).forEach(([id, v]) => { const el = document.getElementById(id); if (el){ el.value = v; } }); Object.keys(o).forEach(id => Q[id] && check(id)); } catch(e){} }
+function clearAll(){ if (!confirm('Clear all answers on this version?')) return; ORDER.forEach(id => { document.getElementById(id).value = ''; clearMark(id); }); save(); updateScore(); document.getElementById('result').classList.remove('show'); window.scrollTo({top:0, behavior:'smooth'}); }
+function newTest(){ const s = 1000 + Math.floor(Math.random()*9000); history.replaceState(null, '', '#v=' + s); build(s); window.scrollTo({top:0, behavior:'smooth'}); }
+
+// ---------- events ----------
+const test = document.getElementById('test');
+let lastFocus = null;
+test.addEventListener('focusin', e => { if (e.target.matches('input.ans')) lastFocus = e.target; });
+test.addEventListener('focusout', e => { if (e.target.matches('input.ans') && e.target.value.trim()) check(e.target.id); });
+test.addEventListener('input', e => { if (e.target.matches('input.ans') && STATE[e.target.id]) { clearMark(e.target.id); updateScore(); } });
+test.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches('input.ans')){
+    e.preventDefault();
+    const id = e.target.id;
+    check(id);
+    const nx = ORDER[ORDER.indexOf(id) + 1];
+    if (nx && STATE[id] !== 'bad') document.getElementById(nx).focus();
+  }
+});
+document.getElementById('btnNew').onclick = newTest;
+document.getElementById('btnGrade').onclick = gradeAll;
+
+const bar = document.getElementById('accbar');
+['á','é','í','ó','ú','ñ','ü','¿','¡'].forEach(ch => {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = ch;
+  b.addEventListener('mousedown', e => e.preventDefault());
+  b.addEventListener('click', () => {
+    const el = lastFocus; if (!el) return;
+    const s = el.selectionStart ?? el.value.length, en = el.selectionEnd ?? s;
+    el.value = el.value.slice(0, s) + ch + el.value.slice(en);
+    el.focus(); el.setSelectionRange(s + 1, s + 1);
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  });
+  bar.appendChild(b);
+});
+
+const m = location.hash.match(/v=(\d+)/);
+const seed = m ? +m[1] : 1000 + Math.floor(Math.random()*9000);
+if (!m) history.replaceState(null, '', '#v=' + seed);
+build(seed);
+})();
+</script>
+</body>
+</html>
